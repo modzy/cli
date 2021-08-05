@@ -38,10 +38,10 @@ func whoamiRun(cmd *cobra.Command, args []string) error {
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', tabwriter.AlignRight)
 	fmt.Fprintf(w, "Configuration file: \t%s\n", rootArgs.configurationFoundAt)
+	fmt.Fprintf(w, "Base URL: \t%s\n", rootArgs.BaseURL)
 	fmt.Fprintf(w, "API Key: \t%s\n", apiKey)
 	fmt.Fprintf(w, "Team ID: \t%s\n", rootArgs.TeamID)
 	fmt.Fprintf(w, "Team Token: \t%s\n", teamToken)
-
 	w.Flush()
 
 	return nil

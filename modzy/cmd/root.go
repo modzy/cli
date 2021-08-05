@@ -19,6 +19,7 @@ var rootArgs struct {
 	Verbose              bool
 	Profile              string
 	configurationFoundAt string
+	BaseURL              string
 	APIKey               string
 	TeamID               string
 	TeamToken            string
@@ -31,11 +32,13 @@ var rootCmd = &cobra.Command{
 ENV variables, or configuration files.  Precedence is command flag > ENV > configuration file.
 
 The flags are:
+- base-url
 - api-key
 - team-id
 - team-token
 
 The ENV variables are:
+- MODZY_BASE_URL
 - MODZY_API_KEY
 - MODZY_TEAM_ID
 - MODZY_TEAM_TOKEN
@@ -49,6 +52,7 @@ The default profile is "default".
 This file should look something like:
 
 	> cat ~/.modzy/default.yaml
+	base-url: https://base.url
 	# use an api key:
 	api-key: yourkey.here
 	# or use a team key:
@@ -59,6 +63,7 @@ You can troubleshoot your configuration using the "whoami" command:
 
 	> modzy --profile dev whoami
 	Configuration file: /home/user/.modzy/dev.yaml
+			Base URL: base
 			API Key: yourkey.***
 			Team ID: yourteamid
 			Team Token: yourteam.***
@@ -78,15 +83,18 @@ func init() {
 
 	rootCmd.PersistentFlags().BoolVarP(&rootArgs.Verbose, "verbose", "v", false, "enable debug log output")
 	rootCmd.PersistentFlags().StringVarP(&rootArgs.Profile, "profile", "p", "default", "use a profile located at $HOME/.modzy/{profile}")
-	rootCmd.PersistentFlags().StringVarP(&rootArgs.APIKey, "api-key", "", "", "provide the API key to use for authentication")
-	rootCmd.PersistentFlags().StringVarP(&rootArgs.TeamID, "team-id", "", "", "provide the team id to use for team authentication")
-	rootCmd.PersistentFlags().StringVarP(&rootArgs.TeamToken, "team-token", "", "", "provide the team token to use for team authentication")
+	rootCmd.PersistentFlags().StringVarP(&rootArgs.BaseURL, "base-url", "", "", "modzy API base URL")
+	rootCmd.PersistentFlags().StringVarP(&rootArgs.APIKey, "api-key", "", "", "modzy API key to use for authentication")
+	rootCmd.PersistentFlags().StringVarP(&rootArgs.TeamID, "team-id", "", "", "modzy API team ID to use for team authentication")
+	rootCmd.PersistentFlags().StringVarP(&rootArgs.TeamToken, "team-token", "", "", "modzy API team token to use for team authentication")
 }
 
 // Execute -
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		logrus.WithError(err).Fatal("Error executing command")
+		if rootArgs.Verbose {
+			logrus.WithError(err).Fatal("Error executing command")
+		}
 	}
 }
 
