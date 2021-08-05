@@ -43,7 +43,7 @@ func modelsGetRun(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	render.Output(os.Stdout, &ModelOutputer{}, out, modelsGetArgs.Output)
+	render.Output(os.Stdout, &ModelOutputer{}, out.Details, modelsGetArgs.Output)
 	return nil
 }
 

@@ -9,8 +9,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var whoamiArgs struct {
-}
+// var whoamiArgs struct {
+// }
 
 func init() {
 	rootCmd.AddCommand(whoamiCmd)

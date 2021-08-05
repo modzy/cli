@@ -7,7 +7,7 @@ fmt:
 
 .PHONY: lint
 lint:
-	staticcheck
+	staticcheck ./...
 
 .PHONY: test
 test:
@@ -15,11 +15,11 @@ test:
 
 .PHONY: vet
 vet:
-	go vet ./...
+	go vet ./modzy/...
 
 .PHONY: build
 build:
-	go build ./...
+	go build ./modzy/...
 
 .PHONY: clean
 clean:

@@ -4,8 +4,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var modelsArgs struct {
-}
+// var modelsArgs struct {
+// }
 
 func init() {
 	rootCmd.AddCommand(modelsCmd)
