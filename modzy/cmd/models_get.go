@@ -9,6 +9,7 @@ import (
 
 	"github.com/modzy/cli/modzy/render"
 	modzysdk "github.com/modzy/sdk-go"
+	modzysdkmodel "github.com/modzy/sdk-go/model"
 
 	"github.com/spf13/cobra"
 )
@@ -56,20 +57,20 @@ func (o *ModelOutputer) RowHeader(w io.Writer) error {
 }
 
 func (o *ModelOutputer) RowData(w io.Writer, generic interface{}) error {
-	out := generic.(*modzysdk.GetModelDetailsOutput)
-	fmt.Fprintf(w, "%s\t%s\t%s\n", out.Details.ModelID, out.Details.LatestVersion, out.Details.Author)
+	out := generic.(modzysdkmodel.ModelDetails)
+	fmt.Fprintf(w, "%s\t%s\t%s\n", out.ModelID, out.LatestVersion, out.Author)
 	return nil
 }
 
 func (o *ModelOutputer) Standard(w io.Writer, generic interface{}) error {
-	out := generic.(*modzysdk.GetModelDetailsOutput)
+	out := generic.(modzysdkmodel.ModelDetails)
 
 	tabbed := tabwriter.NewWriter(w, 0, 0, 1, ' ', tabwriter.AlignRight)
-	fmt.Fprintf(tabbed, "ID: \t%s\n", out.Details.ModelID)
-	fmt.Fprintf(tabbed, "Name: \t%s\n", out.Details.Name)
-	fmt.Fprintf(tabbed, "Author: \t%s\n", out.Details.Author)
-	fmt.Fprintf(tabbed, "Versions: \t%s\n", strings.Join(out.Details.Versions, ", "))
-	fmt.Fprintf(tabbed, "Description: \t%s\n", out.Details.Description)
+	fmt.Fprintf(tabbed, "ID: \t%s\n", out.ModelID)
+	fmt.Fprintf(tabbed, "Name: \t%s\n", out.Name)
+	fmt.Fprintf(tabbed, "Author: \t%s\n", out.Author)
+	fmt.Fprintf(tabbed, "Versions: \t%s\n", strings.Join(out.Versions, ", "))
+	fmt.Fprintf(tabbed, "Description: \t%s\n", out.Description)
 
 	if err := tabbed.Flush(); err != nil {
 		return err
