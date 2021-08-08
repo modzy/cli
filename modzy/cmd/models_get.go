@@ -27,7 +27,7 @@ func init() {
 var modelsGetCmd = &cobra.Command{
 	Use:   "get [modelID]",
 	Short: "Get detailed information about a model",
-	Long:  `This will get effective authentication information that this command is using and will display the non-sensitive portion for the purpose of troubleshooting authentication.`,
+	Long:  ``,
 	Args:  cobra.ExactArgs(1),
 	RunE:  modelsGetRun,
 }
@@ -49,18 +49,6 @@ func modelsGetRun(cmd *cobra.Command, args []string) error {
 }
 
 type ModelOutputer struct{}
-
-func (o *ModelOutputer) RowHeader(w io.Writer) error {
-	fmt.Fprintf(w, "ID\tLatest Version\tAuthor\n")
-	fmt.Fprintf(w, "--\t--------------\t------\n")
-	return nil
-}
-
-func (o *ModelOutputer) RowData(w io.Writer, generic interface{}) error {
-	out := generic.(modzysdkmodel.ModelDetails)
-	fmt.Fprintf(w, "%s\t%s\t%s\n", out.ModelID, out.LatestVersion, out.Author)
-	return nil
-}
 
 func (o *ModelOutputer) Standard(w io.Writer, generic interface{}) error {
 	out := generic.(modzysdkmodel.ModelDetails)
