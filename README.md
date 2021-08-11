@@ -78,3 +78,7 @@ The top level `modzy --help` has additional high level documentation on how to u
     modzy jobs wait <job_id>
     modzy jobs cancel <job_id>
 
+### Other TODO:
+- [ ] Completions
+- [ ] Unit testing
+- [ ] Submit jobs
