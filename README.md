@@ -62,6 +62,7 @@ The top level `modzy --help` has additional high level documentation on how to u
 - `-v` is for verbose output, for debugging purpose.  "complete output" will be achieved when supplying a --output format that isn't the default (like json or yaml)
 - instead of `modzy jobs status <job_id>` -- what about `modzy jobs get <job_id> --output jsonpath='{.status}'`?  This is a more generic method at grabbing any property from the response.
 - I added `modzy jobs wait <job_id>`
+- models list is not sortable
 
 ### Command examples
 
@@ -70,10 +71,10 @@ The top level `modzy --help` has additional high level documentation on how to u
     MODZY_API_KEY=APIKEY modzy ...
     modzy ... whoami
 
-    modzy models list --filter author=modzy --page 1+10 --sort somefield:asc
+    modzy models list --filter author=modzy --take 10 --page 2 --sort somefield:asc
     modzy models get <model_id>
     
-    modzy jobs list --filter status=TIMEDOUT --page 1+10 --sort date:desc
+    modzy jobs list --filter status=TIMEDOUT --take 10 --page 2 --sort date:desc
     modzy jobs get <job_id> --output jsonpath='{.status}'
     modzy jobs wait <job_id>
     modzy jobs cancel <job_id>

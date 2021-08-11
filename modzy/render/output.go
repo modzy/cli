@@ -9,8 +9,6 @@ import (
 )
 
 type StandardOutputer interface {
-	RowHeader(w io.Writer) error
-	RowData(w io.Writer, generic interface{}) error
 	Standard(w io.Writer, generic interface{}) error
 }
 
