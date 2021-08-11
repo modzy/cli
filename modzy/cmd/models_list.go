@@ -14,24 +14,22 @@ import (
 )
 
 var modelsListArgs struct {
-	Filter []string
-	Take   int
-	Page   int
+	pagingArgs
 	Output string
 }
 
 func init() {
-	modelsListCmd.Flags().StringArrayVarP(&modelsListArgs.Filter, "filter", "", []string{}, "TODO: good description")
-	modelsListCmd.Flags().IntVarP(&modelsListArgs.Take, "take", "", 10, "TODO: good description")
-	modelsListCmd.Flags().IntVarP(&modelsListArgs.Page, "page", "", 1, "TODO: good description")
-	modelsListCmd.Flags().StringVarP(&modelsListArgs.Output, "output", "o", "", "TODO: good description")
+	modelsListCmd.Flags().StringArrayVarP(&modelsListArgs.Filter, "filter", "", []string{}, "")
+	modelsListCmd.Flags().IntVarP(&modelsListArgs.Take, "take", "", 10, "")
+	modelsListCmd.Flags().IntVarP(&modelsListArgs.Page, "page", "", 1, "")
+	modelsListCmd.Flags().StringVarP(&modelsListArgs.Output, "output", "o", "", "")
 
 	modelsCmd.AddCommand(modelsListCmd)
 }
 
 var modelsListCmd = &cobra.Command{
-	Use:   "list [modelID]",
-	Short: "List models information about a model",
+	Use:   "list",
+	Short: "List models",
 	Long:  ``,
 	RunE:  modelsListRun,
 }
@@ -40,17 +38,14 @@ func modelsListRun(cmd *cobra.Command, args []string) error {
 	ctx := cmd.Context()
 	client := getClient()
 
-	input := (&modzysdk.ListModelsInput{}).
-		WithPaging(modelsListArgs.Take, modelsListArgs.Page)
-
-	for _, filter := range modelsListArgs.Filter {
-		filterSplit := strings.Split(filter, "=")
-		if len(filterSplit) != 2 {
-			return fmt.Errorf("Filter is not correctly formatted (field=value): '%s'", filter)
-		}
-		input.Paging = input.Paging.WithFilterAnd(filterSplit[0], filterSplit[1])
+	paging, err := modelsListArgs.GetPagingInput()
+	if err != nil {
+		return err
 	}
 
+	input := &modzysdk.ListModelsInput{
+		Paging: paging,
+	}
 	out, err := client.Models().ListModels(ctx, input)
 	if err != nil {
 		return err
