@@ -61,7 +61,8 @@ func jobsListRun(cmd *cobra.Command, args []string) error {
 	}
 	out, err := client.Jobs().ListJobsHistory(ctx, input)
 	if err != nil {
-		return err
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 
 	render.Output(os.Stdout, &jobsOutputer{}, out.Jobs, jobsListArgs.Output)
