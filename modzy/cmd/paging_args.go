@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	ttime "github.com/modzy/cli/modzy/time"
+	ttime "github.com/modzy/cli/internal/time"
 	modzysdk "github.com/modzy/sdk-go"
 )
 

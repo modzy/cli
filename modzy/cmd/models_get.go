@@ -7,7 +7,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/modzy/cli/modzy/render"
+	"github.com/modzy/cli/internal/render"
 	modzysdk "github.com/modzy/sdk-go"
 	modzysdkmodel "github.com/modzy/sdk-go/model"
 
