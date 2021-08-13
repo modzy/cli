@@ -17,6 +17,7 @@ const (
 
 var rootArgs struct {
 	Verbose              bool
+	VerboseHTTP          bool
 	Profile              string
 	configurationFoundAt string
 	BaseURL              string
@@ -80,8 +81,8 @@ You can troubleshoot your configuration using the "whoami" command:
 
 func init() {
 	cobra.OnInitialize(configureLogging)
-
-	rootCmd.PersistentFlags().BoolVarP(&rootArgs.Verbose, "verbose", "v", false, "enable debug log output")
+	rootCmd.PersistentFlags().BoolVarP(&rootArgs.Verbose, "verbose", "v", false, "enable more verbose log output for debugging purposes")
+	rootCmd.PersistentFlags().BoolVarP(&rootArgs.VerboseHTTP, "verbose-http", "", false, "enable log output of http request and response data")
 	rootCmd.PersistentFlags().StringVarP(&rootArgs.Profile, "profile", "p", "default", "use a profile located at $HOME/.modzy/{profile}")
 	rootCmd.PersistentFlags().StringVarP(&rootArgs.BaseURL, "base-url", "", "", "modzy API base URL")
 	rootCmd.PersistentFlags().StringVarP(&rootArgs.APIKey, "api-key", "", "", "modzy API key to use for authentication")

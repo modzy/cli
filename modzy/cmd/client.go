@@ -11,5 +11,9 @@ func getClient() modzysdk.Client {
 	} else {
 		client = client.WithTeamKey(rootArgs.TeamID, rootArgs.TeamToken)
 	}
+
+	if rootArgs.VerboseHTTP {
+		client = client.WithOptions(modzysdk.WithHTTPDebugging(true, true))
+	}
 	return client
 }
