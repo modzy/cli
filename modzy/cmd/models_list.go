@@ -7,7 +7,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/modzy/cli/modzy/render"
+	"github.com/modzy/cli/internal/render"
 	modzysdk "github.com/modzy/sdk-go"
 
 	"github.com/spf13/cobra"
@@ -28,10 +28,11 @@ func init() {
 }
 
 var modelsListCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List models",
-	Long:  ``,
-	RunE:  modelsListRun,
+	Use:          "list",
+	Short:        "List models",
+	Long:         ``,
+	RunE:         modelsListRun,
+	SilenceUsage: true,
 }
 
 func modelsListRun(cmd *cobra.Command, args []string) error {
@@ -48,8 +49,7 @@ func modelsListRun(cmd *cobra.Command, args []string) error {
 	}
 	out, err := client.Models().ListModels(ctx, input)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		return err
 	}
 
 	summaries := []modelSummaryWithMore{}
@@ -58,8 +58,7 @@ func modelsListRun(cmd *cobra.Command, args []string) error {
 			ModelID: modelSummary.ID,
 		})
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			os.Exit(1)
+			return err
 		}
 		summaries = append(summaries, modelSummaryWithMore{
 			ID:       modelSummary.ID,
@@ -68,13 +67,13 @@ func modelsListRun(cmd *cobra.Command, args []string) error {
 			Versions: detail.Details.Versions,
 		})
 	}
-	render.Output(os.Stdout, &ModelsOutputer{}, summaries, modelsListArgs.Output)
+	render.Output(os.Stdout, &modelsListOutputer{}, summaries, modelsListArgs.Output)
 	return nil
 }
 
-type ModelsOutputer struct{}
+type modelsListOutputer struct{}
 
-func (o *ModelsOutputer) Standard(w io.Writer, generic interface{}) error {
+func (o *modelsListOutputer) Standard(w io.Writer, generic interface{}) error {
 	outs := generic.([]modelSummaryWithMore)
 
 	tabbed := tabwriter.NewWriter(w, 0, 0, 1, ' ', 0)

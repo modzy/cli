@@ -1,18 +1,10 @@
 package cmd
 
 import (
-	"fmt"
-	"strings"
-
+	"github.com/modzy/cli/internal/cobrainit"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
 	prefixed "github.com/x-cray/logrus-prefixed-formatter"
-)
-
-const (
-	envPrefix = "MODZY"
 )
 
 var rootArgs struct {
@@ -72,7 +64,9 @@ You can troubleshoot your configuration using the "whoami" command:
 `,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		// You can bind cobra and viper in a few locations, but PersistencePreRunE on the root command works well
-		return initializeConfig(cmd)
+		profileFound, err := cobrainit.InitializeConfig(cmd, rootArgs.Profile)
+		rootArgs.configurationFoundAt = profileFound
+		return err
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		_ = cmd.Help()
@@ -94,7 +88,7 @@ func init() {
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		if rootArgs.Verbose {
-			logrus.WithError(err).Fatal("Error executing command")
+			logrus.WithError(err).Error("Error executing command")
 		}
 	}
 }
@@ -107,63 +101,4 @@ func configureLogging() {
 	if rootArgs.Verbose {
 		logrus.SetLevel(logrus.DebugLevel)
 	}
-}
-
-func initializeConfig(cmd *cobra.Command) error {
-	v := viper.New()
-
-	// config files
-	// if we have a profile provided, then only read that profile
-	v.AddConfigPath(".")
-	v.AddConfigPath("/etc/modzy/")
-	v.AddConfigPath("$HOME/.modzy/")
-	configName := "default"
-	if rootArgs.Profile != "" {
-		configName = rootArgs.Profile
-	}
-	v.SetConfigName(configName)
-	v.SetConfigType("yaml")
-	if err := v.ReadInConfig(); err != nil {
-		// if the config file is not found, continue on
-		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
-			return err
-		}
-	}
-	rootArgs.configurationFoundAt = v.ConfigFileUsed()
-	logrus.Debugf("Using config file at %s", rootArgs.configurationFoundAt)
-
-	// env
-	v.SetEnvPrefix(envPrefix)
-	v.AutomaticEnv()
-
-	// flags
-	bindFlags(cmd, v)
-
-	return nil
-}
-
-func bindFlags(cmd *cobra.Command, v *viper.Viper) {
-	cmd.Flags().VisitAll(func(f *pflag.Flag) {
-		if f.Name == "Profile" {
-			// don't do this for the profile flag
-			return
-		}
-
-		// Environment variables can't have dashes in them, so bind them to their equivalent
-		if strings.Contains(f.Name, "-") {
-			envVarSuffix := strings.ToUpper(strings.ReplaceAll(f.Name, "-", "_"))
-			bindName := fmt.Sprintf("%s_%s", envPrefix, envVarSuffix)
-			if err := v.BindEnv(f.Name, bindName); err != nil {
-				logrus.WithError(err).Fatalf("Failed to bind flags for %s to %s", f.Name, bindName)
-			}
-		}
-
-		// Apply the viper config value to the flag when the flag is not set and viper has a value
-		if !f.Changed && v.IsSet(f.Name) {
-			val := v.Get(f.Name)
-			if err := cmd.Flags().Set(f.Name, fmt.Sprintf("%v", val)); err != nil {
-				logrus.WithError(err).Fatalf("Failed to set cmd flags from viper")
-			}
-		}
-	})
 }

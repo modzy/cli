@@ -6,7 +6,7 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/modzy/cli/modzy/render"
+	"github.com/modzy/cli/internal/render"
 
 	modzysdk "github.com/modzy/sdk-go"
 	modzysdkmodel "github.com/modzy/sdk-go/model"
@@ -41,10 +41,11 @@ func init() {
 }
 
 var jobsListCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List jobs",
-	Long:  ``,
-	RunE:  jobsListRun,
+	Use:          "list",
+	Short:        "List jobs",
+	Long:         ``,
+	RunE:         jobsListRun,
+	SilenceUsage: true,
 }
 
 func jobsListRun(cmd *cobra.Command, args []string) error {
@@ -64,13 +65,13 @@ func jobsListRun(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	render.Output(os.Stdout, &jobsOutputer{}, out.Jobs, jobsListArgs.Output)
+	render.Output(os.Stdout, &jobsListOutputer{}, out.Jobs, jobsListArgs.Output)
 	return nil
 }
 
-type jobsOutputer struct{}
+type jobsListOutputer struct{}
 
-func (o *jobsOutputer) Standard(w io.Writer, generic interface{}) error {
+func (o *jobsListOutputer) Standard(w io.Writer, generic interface{}) error {
 	outs := generic.([]modzysdkmodel.JobDetails)
 
 	tabbed := tabwriter.NewWriter(w, 0, 0, 1, ' ', 0)
