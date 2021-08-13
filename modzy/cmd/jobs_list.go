@@ -41,10 +41,11 @@ func init() {
 }
 
 var jobsListCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List jobs",
-	Long:  ``,
-	RunE:  jobsListRun,
+	Use:          "list",
+	Short:        "List jobs",
+	Long:         ``,
+	RunE:         jobsListRun,
+	SilenceUsage: true,
 }
 
 func jobsListRun(cmd *cobra.Command, args []string) error {
@@ -61,17 +62,16 @@ func jobsListRun(cmd *cobra.Command, args []string) error {
 	}
 	out, err := client.Jobs().ListJobsHistory(ctx, input)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		return err
 	}
 
-	render.Output(os.Stdout, &jobsOutputer{}, out.Jobs, jobsListArgs.Output)
+	render.Output(os.Stdout, &jobsListOutputer{}, out.Jobs, jobsListArgs.Output)
 	return nil
 }
 
-type jobsOutputer struct{}
+type jobsListOutputer struct{}
 
-func (o *jobsOutputer) Standard(w io.Writer, generic interface{}) error {
+func (o *jobsListOutputer) Standard(w io.Writer, generic interface{}) error {
 	outs := generic.([]modzysdkmodel.JobDetails)
 
 	tabbed := tabwriter.NewWriter(w, 0, 0, 1, ' ', 0)

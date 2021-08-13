@@ -4,13 +4,12 @@ import (
 	"net/http"
 	"strings"
 	"testing"
-
-	modzysdkmodel "github.com/modzy/sdk-go/model"
 )
 
-func TestJobsListFine(t *testing.T) {
+func TestModelsListFine(t *testing.T) {
+	x := 0
 	stdout, _ := runTestCommand(
-		[]string{"jobs", "list"},
+		[]string{"models", "list"},
 		func() {
 			Execute()
 		},
@@ -18,28 +17,36 @@ func TestJobsListFine(t *testing.T) {
 			if r.Method != "GET" {
 				t.Errorf("expected method to be GET, got %s", r.Method)
 			}
-			if !strings.HasPrefix(r.RequestURI, "/api/jobs/history?direction=DESC") {
+			if !strings.HasPrefix(r.RequestURI, "/api/models") {
 				t.Errorf("get url not expected: %s", r.RequestURI)
 			}
-			w.Write([]byte(`[{"jobIdentifier": "job1"},{"jobIdentifier": "job2"}]`))
+			x++
+			switch x {
+			case 1:
+				w.Write([]byte(`[{"modelId": "model1"},{"modelId": "model2"}]`))
+			case 2:
+				w.Write([]byte(`{"modelId": "model1","modelId":"a1"}`))
+			case 3:
+				w.Write([]byte(`{"modelId": "model2","modelId":"a2"}`))
+			}
 		},
 	)
 
-	if !strings.Contains(stdout, "job1") {
+	if !strings.Contains(stdout, "model1") {
 		t.Fatalf("out not expected: '%s'", stdout)
 	}
-	if !strings.Contains(stdout, "job2") {
+	if !strings.Contains(stdout, "model2") {
 		t.Fatalf("out not expected: '%s'", stdout)
 	}
 }
 
-func TestJobsListBadFilter(t *testing.T) {
+func TestModelsListBadFilter(t *testing.T) {
 	defer (func() {
-		jobsListArgs.Filter = []string{}
+		modelsListArgs.Filter = []string{}
 	})()
 
 	_, stderr := runTestCommand(
-		[]string{"jobs", "list", "--filter", "b:ad"},
+		[]string{"models", "list", "--filter", "b:ad"},
 		func() {
 			Execute()
 		},
@@ -59,9 +66,9 @@ func TestJobsListBadFilter(t *testing.T) {
 	}
 }
 
-func TestJobsListSDKFailure(t *testing.T) {
+func TestModelsListSDKListFailure(t *testing.T) {
 	_, stderr := runTestCommand(
-		[]string{"jobs", "list"},
+		[]string{"models", "list"},
 		func() {
 			Execute()
 		},
@@ -75,9 +82,31 @@ func TestJobsListSDKFailure(t *testing.T) {
 	}
 }
 
-func TestJobsListOutputerError(t *testing.T) {
-	outputer := &jobsListOutputer{}
-	err := outputer.Standard(&failWriter{}, []modzysdkmodel.JobDetails{})
+func TestModelsListSDKDetailFailure(t *testing.T) {
+	x := 0
+	_, stderr := runTestCommand(
+		[]string{"models", "list"},
+		func() {
+			Execute()
+		},
+		func(w http.ResponseWriter, r *http.Request) {
+			x++
+			switch x {
+			case 1:
+				w.Write([]byte(`[{"id": "model1"},{"id": "model2"}]`))
+			case 2:
+				w.WriteHeader(500)
+			}
+		},
+	)
+
+	if !strings.Contains(stderr, "500") {
+		t.Fatalf("out not expected: '%s'", stderr)
+	}
+}
+func TestModelsListOutputerError(t *testing.T) {
+	outputer := &modelsListOutputer{}
+	err := outputer.Standard(&failWriter{}, []modelSummaryWithMore{})
 	if err == nil {
 		t.Fatalf("expected an error")
 	}

@@ -18,7 +18,7 @@ func TestMain(t *testing.T) {
 
 	os.Stdout = w
 
-	os.Args = []string{os.Args[0], "--help"}
+	os.Args = []string{"fake-executable", "--help"}
 	main()
 	w.Close()
 

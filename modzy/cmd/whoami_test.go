@@ -1,29 +1,32 @@
 package cmd
 
 import (
-	"os"
 	"strings"
 	"testing"
 )
 
 func TestWhoamiFine(t *testing.T) {
 	// for coverage
-	os.Args = []string{os.Args[0], "whoami"}
-	Execute()
+	runTestCommand(
+		[]string{"whoami"},
+		func() {
+			Execute()
+		},
+		nil,
+	)
 }
 
 func TestWhoamiTeamFine(t *testing.T) {
 	// for coverage
-	rootArgs.TeamToken = "notsensitive.sensitive"
+	stdout, _ := runTestCommand(
+		[]string{"--team-token", "notsensitive.sensitive", "--team-id", "teamid", "whoami"},
+		func() {
+			Execute()
+		},
+		nil,
+	)
 
-	out, err := runTestCommand(func() {
-		Execute()
-	}, []string{"whoami"})
-
-	if err != nil {
-		t.Fatalf("error not expected: %v", err)
-	}
-	if !strings.Contains(out, "Configuration file:") {
-		t.Fatalf("out not expected: '%s'", out)
+	if !strings.Contains(stdout, "Configuration file:") {
+		t.Fatalf("out not expected: '%s'", stdout)
 	}
 }

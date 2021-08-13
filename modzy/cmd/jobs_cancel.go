@@ -1,9 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
-
 	modzysdk "github.com/modzy/sdk-go"
 
 	"github.com/spf13/cobra"
@@ -17,11 +14,12 @@ func init() {
 }
 
 var jobsCancelCmd = &cobra.Command{
-	Use:   "cancel [jobIdentifier]",
-	Short: "Cancel a job",
-	Long:  ``,
-	Args:  cobra.ExactArgs(1),
-	RunE:  jobsCancelRun,
+	Use:          "cancel [jobIdentifier]",
+	Short:        "Cancel a job",
+	Long:         ``,
+	Args:         cobra.ExactArgs(1),
+	RunE:         jobsCancelRun,
+	SilenceUsage: true,
 }
 
 func jobsCancelRun(cmd *cobra.Command, args []string) error {
@@ -33,8 +31,7 @@ func jobsCancelRun(cmd *cobra.Command, args []string) error {
 		JobIdentifier: jobID,
 	})
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		return err
 	}
 
 	return nil

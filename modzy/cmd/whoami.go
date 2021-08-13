@@ -17,10 +17,11 @@ func init() {
 }
 
 var whoamiCmd = &cobra.Command{
-	Use:   "whoami",
-	Short: "Summarize effective authentication information",
-	Long:  `This will get effective authentication information that this command is using and will display the non-sensitive portion for the purpose of troubleshooting authentication.`,
-	RunE:  whoamiRun,
+	Use:          "whoami",
+	Short:        "Summarize effective authentication information",
+	Long:         `This will get effective authentication information that this command is using and will display the non-sensitive portion for the purpose of troubleshooting authentication.`,
+	RunE:         whoamiRun,
+	SilenceUsage: true,
 }
 
 func whoamiRun(cmd *cobra.Command, args []string) error {

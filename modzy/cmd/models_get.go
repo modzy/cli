@@ -25,11 +25,12 @@ func init() {
 }
 
 var modelsGetCmd = &cobra.Command{
-	Use:   "get [modelID]",
-	Short: "Get detailed information about a model",
-	Long:  ``,
-	Args:  cobra.ExactArgs(1),
-	RunE:  modelsGetRun,
+	Use:          "get [modelID]",
+	Short:        "Get detailed information about a model",
+	Long:         ``,
+	Args:         cobra.ExactArgs(1),
+	RunE:         modelsGetRun,
+	SilenceUsage: true,
 }
 
 func modelsGetRun(cmd *cobra.Command, args []string) error {
@@ -44,13 +45,13 @@ func modelsGetRun(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	render.Output(os.Stdout, &ModelOutputer{}, out.Details, modelsGetArgs.Output)
+	render.Output(os.Stdout, &modelsGetOutputer{}, out.Details, modelsGetArgs.Output)
 	return nil
 }
 
-type ModelOutputer struct{}
+type modelsGetOutputer struct{}
 
-func (o *ModelOutputer) Standard(w io.Writer, generic interface{}) error {
+func (o *modelsGetOutputer) Standard(w io.Writer, generic interface{}) error {
 	out := generic.(modzysdkmodel.ModelDetails)
 
 	tabbed := tabwriter.NewWriter(w, 0, 0, 1, ' ', tabwriter.AlignRight)

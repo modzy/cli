@@ -35,7 +35,9 @@ func InitializeConfig(cmd *cobra.Command, profile string) (string, error) {
 		}
 	}
 
-	logrus.Debugf("Using config file at %s", v.ConfigFileUsed())
+	if v.ConfigFileUsed() != "" {
+		logrus.Debugf("Using config file at %s", v.ConfigFileUsed())
+	}
 
 	// env
 	v.SetEnvPrefix(envPrefix)
