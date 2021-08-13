@@ -81,5 +81,4 @@ The top level `modzy --help` has additional high level documentation on how to u
 
 ### Other TODO:
 - [ ] Completions
-- [ ] Unit testing
 - [ ] Submit jobs
