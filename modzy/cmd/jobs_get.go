@@ -40,8 +40,7 @@ func jobsGetRun(cmd *cobra.Command, args []string) error {
 		JobIdentifier: jobID,
 	})
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		return err
 	}
 
 	render.Output(os.Stdout, &JobRenderer{}, out.Details, jobsGetArgs.Output)
