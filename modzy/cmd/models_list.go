@@ -48,7 +48,8 @@ func modelsListRun(cmd *cobra.Command, args []string) error {
 	}
 	out, err := client.Models().ListModels(ctx, input)
 	if err != nil {
-		return err
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 
 	summaries := []modelSummaryWithMore{}
@@ -57,7 +58,8 @@ func modelsListRun(cmd *cobra.Command, args []string) error {
 			ModelID: modelSummary.ID,
 		})
 		if err != nil {
-			return err
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
 		}
 		summaries = append(summaries, modelSummaryWithMore{
 			ID:       modelSummary.ID,
