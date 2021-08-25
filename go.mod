@@ -14,3 +14,5 @@ require (
 	github.com/x-cray/logrus-prefixed-formatter v0.5.2
 	gopkg.in/yaml.v2 v2.4.0
 )
+
+replace github.com/modzy/sdk-go v0.0.4 => /home/matt/repos/go/src/github.com/modzy/sdk-go
