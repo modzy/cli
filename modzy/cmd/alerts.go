@@ -63,12 +63,15 @@ func (o *alertsGetOutputer) Standard(w io.Writer, generic interface{}) error {
 	alerts := generic.([]alertAndDetail)
 
 	if len(alerts) == 0 {
-		fmt.Printf("No alerts\n")
+		// checking this write for test coverage; will just ignore elsewhere
+		if _, err := fmt.Fprintf(w, "No alerts\n"); err != nil {
+			return err
+		}
 	} else {
 		for _, aAndD := range alerts {
-			fmt.Printf("%s: %d\n", aAndD.Type, aAndD.Count)
+			fmt.Fprintf(w, "%s: %d\n", aAndD.Type, aAndD.Count)
 			for _, ent := range aAndD.Entities {
-				fmt.Printf("- %s\n", ent)
+				fmt.Fprintf(w, "- %s\n", ent)
 			}
 		}
 	}
