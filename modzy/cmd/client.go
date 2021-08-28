@@ -4,7 +4,7 @@ import (
 	modzysdk "github.com/modzy/sdk-go"
 )
 
-func getClient() modzysdk.Client {
+func defaultGetClient() modzysdk.Client {
 	client := modzysdk.NewClient(rootArgs.BaseURL)
 	if rootArgs.APIKey != "" {
 		client = client.WithAPIKey(rootArgs.APIKey)
@@ -17,3 +17,6 @@ func getClient() modzysdk.Client {
 	}
 	return client
 }
+
+// var for testing
+var getClient = defaultGetClient
