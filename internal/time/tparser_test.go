@@ -23,9 +23,9 @@ func TestParseT(t *testing.T) {
 		return nowT
 	}
 
-	zero := nowT.Format(model.DateFormat)
-	plus3 := nowT.AddDate(0, 0, 3).Format(model.DateFormat)
-	minus4 := nowT.AddDate(0, 0, -4).Format(model.DateFormat)
+	zero := nowT.Format(model.TimeFormat)
+	plus3 := nowT.AddDate(0, 0, 3).Format(model.TimeFormat)
+	minus4 := nowT.AddDate(0, 0, -4).Format(model.TimeFormat)
 
 	expectations := []expected{
 		{"", zero, nil},

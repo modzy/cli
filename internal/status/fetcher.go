@@ -8,6 +8,7 @@ import (
 
 type Fetcher interface {
 	FetchTop(ctx context.Context) TopModel
+	FetchProject(ctx context.Context, projectID string) ProjectModel
 }
 
 type StandardFetcher struct {
