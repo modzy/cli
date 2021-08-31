@@ -19,7 +19,7 @@ func ParseT(tString string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return t.Format(model.DateFormat), nil
+	return t.Format(model.TimeFormat), nil
 
 }
 

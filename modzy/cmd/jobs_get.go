@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"text/tabwriter"
+	"time"
 
 	"github.com/modzy/cli/internal/render"
 	modzysdk "github.com/modzy/sdk-go"
@@ -58,6 +59,8 @@ func (o *jobsGetRenderer) Standard(w io.Writer, generic interface{}) error {
 	fmt.Fprintf(tabbed, "Status: \t%s\n", out.Status)
 	fmt.Fprintf(tabbed, "Model: \t%s\n", out.Model.Name)
 	fmt.Fprintf(tabbed, "       \t%s@%s\n", out.Model.Identifier, out.Model.Version)
+	fmt.Fprintf(tabbed, "Queue Time: \t%s\n", time.Duration(out.QueueTime)*time.Millisecond)
+	fmt.Fprintf(tabbed, "Elapsed Time: \t%s\n", time.Duration(out.ElapsedTime)*time.Millisecond)
 
 	if err := tabbed.Flush(); err != nil {
 		return err

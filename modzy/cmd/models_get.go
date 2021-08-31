@@ -19,7 +19,7 @@ var modelsGetArgs struct {
 }
 
 func init() {
-	modelsGetCmd.Flags().StringVarP(&modelsGetArgs.Output, "output", "o", "", "TODO: good output description")
+	modelsGetCmd.Flags().StringVarP(&modelsGetArgs.Output, "output", "o", "", "")
 
 	modelsCmd.AddCommand(modelsGetCmd)
 }
