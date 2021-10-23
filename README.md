@@ -1,5 +1,6 @@
 
 ![Modzy Logo](https://www.modzy.com/wp-content/uploads/2020/06/MODZY-RGB-POS.png)
+[![Go Report Card](https://goreportcard.com/badge/github.com/modzy/cli)](https://goreportcard.com/report/github.com/modzy/cli)
 
 # Modzy Command Line Interface
 Modzy's CLI provides terminal commands for some of our most useful API endpoints. Modzy's CLI is designed primarily for 
