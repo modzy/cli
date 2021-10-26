@@ -85,7 +85,7 @@ The default profile is called "default".
 The yaml file you create should look something like this.
 ```
 	> cat ~/.modzy/default.yaml
-	base-url: BASE_URL
+	base-url: BASE_URLf
 	# use an api key:
 	api-key: API_KEY
 	# or use a team key:
