@@ -19,7 +19,6 @@ builds:
     binary: modzy
 
 
-
 archives:
   - replacements:
       darwin: Darwin
@@ -51,5 +50,5 @@ brews:
       name: vargasraymondj
       email: vargasraymondj@gmail.com
     tap:
-      owner: n8mellis
+      owner: modzy
       name: homebrew-tap
