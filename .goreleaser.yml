@@ -8,13 +8,14 @@ before:
     - go mod tidy
 
 builds:
-  main: ./modzy
   - env:
       - CGO_ENABLED=0
     goos:
       - linux
       - windows
       - darwin
+    main: ./modzy
+
 
 archives:
   - replacements:
