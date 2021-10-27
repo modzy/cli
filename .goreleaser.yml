@@ -8,7 +8,6 @@ before:
     - go mod tidy
 
 builds:
-  main: ./modzy
   - env:
       - CGO_ENABLED=0
     goos:
