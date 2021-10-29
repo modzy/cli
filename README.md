@@ -17,7 +17,7 @@ To install the CLI via Homebrew, first tap the Modzy tap:
 
 Afterwards, you can install the CLI using brew:
 
-`brew install modzy`
+`brew install modzy-cli`
 
 ### Using Go
 As a prerequisite for installing the Modzy CLI, you must install have golang installed. Download and install golang 
