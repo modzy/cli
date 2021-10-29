@@ -9,6 +9,17 @@ information. As a result, not all of Modzy's API endpoints are available via the
 
 For more detailed information, visit our [CLI Documentation page](https://docs.modzy.com/v1.0.6/docs/cli)
 ## Installation
+
+### Homebrew
+To install the CLI via Homebrew, first tap the Modzy tap:
+
+`brew tap modzy/tap`
+
+Afterwards, you can install the CLI using brew:
+
+`brew install modzy`
+
+### Using Go
 As a prerequisite for installing the Modzy CLI, you must install have golang installed. Download and install golang 
 here: https://golang.org/doc/install
 
